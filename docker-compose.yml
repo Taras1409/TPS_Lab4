@@ -1,12 +1,28 @@
-services:
-  bill-service:
-    build: ./bill_service
-    ports:
-      - "8001:8000"
+name: Python CI Application
 
-  payment-service:
-    build: ./payment_service
-    ports:
-      - "9001:8000"
-    depends_on:
-      - bill-service
+on:
+  push:
+    branches: [ main, feature-cicd-pipeline ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        pip install fastapi uvicorn requests pydantic
+
+    - name: Check syntax
+      run: |
+        python -m py_compile bill_service/main.py
+        python -m py_compile payment_service/main.py
