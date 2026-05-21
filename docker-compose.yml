@@ -1,15 +1,12 @@
-version: '3.8'
-
 services:
-
-  product-service:
-    build: ./product_service
+  bill-service:
+    build: ./bill_service
     ports:
       - "8001:8000"
 
-  order-service:
-    build: ./order_service
+  payment-service:
+    build: ./payment_service
     ports:
       - "9001:8000"
     depends_on:
-      - product-service
+      - bill-service
